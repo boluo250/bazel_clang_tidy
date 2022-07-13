@@ -72,7 +72,7 @@ def _toolchain_flags(ctx):
     compile_variables = cc_common.create_compile_variables(
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
-        user_compile_flags = ctx.fragments.cpp.cxxopts + ctx.fragments.cpp.copts,
+        user_compile_flags = ctx.fragments.cpp.cxxopts + ctx.fragments.cpp.copts + ctx.fragments.cc.cxxopts + ctx.fragments.cc.copts,
     )
     flags = cc_common.get_memory_inefficient_command_line(
         feature_configuration = feature_configuration,
@@ -111,7 +111,7 @@ def _clang_tidy_aspect_impl(target, ctx):
 
 clang_tidy_aspect = aspect(
     implementation = _clang_tidy_aspect_impl,
-    fragments = ["cpp"],
+    fragments = ["cpp", "cc"],
     attrs = {
         "_cc_toolchain": attr.label(default = Label("@bazel_tools//tools/cpp:current_cc_toolchain")),
         "_clang_tidy": attr.label(default = Label("//clang_tidy:clang_tidy")),
