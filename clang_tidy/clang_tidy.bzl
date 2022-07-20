@@ -38,7 +38,7 @@ def _run_tidy(ctx, exe, flags, compilation_context, infile, discriminator):
 
     args.add_all(compilation_context.quote_includes.to_list(), before_each = "-iquote")
 
-    args.add_all(compilation_context.system_includes.to_list(), before_each = "-isystem")
+    #args.add_all(compilation_context.system_includes.to_list(), before_each = "-isystem")
 
     ctx.actions.run(
         inputs = inputs,
@@ -72,7 +72,7 @@ def _toolchain_flags(ctx):
     compile_variables = cc_common.create_compile_variables(
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
-        user_compile_flags = ctx.fragments.cpp.cxxopts + ctx.fragments.cpp.copts + ctx.fragments.cc.cxxopts + ctx.fragments.cc.copts,
+        user_compile_flags = ctx.fragments.cpp.cxxopts + ctx.fragments.cpp.copts,
     )
     flags = cc_common.get_memory_inefficient_command_line(
         feature_configuration = feature_configuration,
@@ -111,7 +111,7 @@ def _clang_tidy_aspect_impl(target, ctx):
 
 clang_tidy_aspect = aspect(
     implementation = _clang_tidy_aspect_impl,
-    fragments = ["cpp", "cc"],
+    fragments = ["cpp"],
     attrs = {
         "_cc_toolchain": attr.label(default = Label("@bazel_tools//tools/cpp:current_cc_toolchain")),
         "_clang_tidy": attr.label(default = Label("//clang_tidy:clang_tidy")),
